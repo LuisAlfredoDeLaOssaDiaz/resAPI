@@ -100,12 +100,17 @@ def stores():
     return render_template('stores.html')
 
 
-@app.route('/stores', methods=['GET'])
-def stores(status: str = "placed"):
-    url3 = "https://petstore.swagger.io/v2/store/order/9".format(status)
+@app.route('/new_store', methods=['GET'])
+def new_store():
+    return render_template('new_store.html')
+
+
+@app.route('/storest', methods=['GET'])
+def storest():
+    url3 = "https://petstore.swagger.io/v2/store/order/9".format(9)
     response = requests.get(url3)
     data_stores = [(i['id'], i['petId'], i['quantity'], i['shipDate'], i['status'], i['complete']) for i in response.json()]
-    return render_template('stores.html', value=data_stores)
+    return render_template('stores.html', value=data_storest)
 
 
 
