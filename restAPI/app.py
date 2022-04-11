@@ -132,8 +132,12 @@ def store():
 @app.route('/stores_search', methods=['POST'])
 def storess(): 
     id = request.form['search']
+    if id:
+        print(id)
+    else:
+        id=0
+    
     rute = '/stores/{0}'.format(id)
-    print(id)
     return redirect(rute)
 
 @app.route('/stores/<id>', methods=['GET'])
