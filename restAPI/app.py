@@ -1,5 +1,6 @@
+from multiprocessing import Value
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
 from flask_bootstrap import Bootstrap
 
 
@@ -48,6 +49,7 @@ def pets(status: str = "pending"):
     url2 = "https://petstore.swagger.io/v2/pet/findByStatus?status={0}".format(status)
     response = requests.get(url2)
     data_pets = [(i['id'], i['name'], i['status']) for i in response.json()]
+    #print(data_pets)
     return render_template('pets.html', value=data_pets)
 
 
@@ -93,11 +95,11 @@ def pet_delete(id_pet):
 
 
 
-
+'''
 @app.route("/stores")
 def stores():
     return render_template('stores.html')
-
+'''
 
 @app.route('/new_store', methods=['GET'])
 def new_store():
@@ -113,26 +115,54 @@ def store_detail():
     status = request.form['status']
     complete = request.form['complete']
     new_data_store = {
-                         "id" : id,
-                         "petId" : petId,
-                         "quantity" : quantity,
-                         "shipDate" : shipDate,
-                         "status" : status,
-                         "complete" : complete
+                         "id": id,
+                         "petId": petId,
+                         "quantity": quantity,
+                         "shipDate": shipDate,
+                         "status": status,
+                         "complete": complete
                      }
     response = requests.post(api_url, json=new_data_store)
-    return render_template('pet_detail.html', value=(id, petId, quantity, shipDate, status, complete))
+    return render_template('store_detail.html', value=(id, petId, quantity, shipDate, status, complete))
 
+@app.route('/stores')
+def store():
+    return render_template('stores.html', value=0)
 
-@app.route('/stores_t', methods=['GET'])
-def stores_t(id: int = 9):
+@app.route('/stores_search', methods=['POST'])
+def storess(): 
+    id = request.form['search']
+    rute = '/stores/{0}'.format(id)
+    print(id)
+    return redirect(rute)
+
+@app.route('/stores/<id>', methods=['GET'])
+def stores(id):
     url3 = "https://petstore.swagger.io/v2/store/order/{0}".format(id)
-    response = requests.get(url3)
-    data_stores_t = [(i['id'], i['petId'], i['quantity'], i['shipDate'], i['status'], i['complete']) for i in response.json()]
-    return render_template('stores.html', value=data_stores_t)
+    response = (requests.get(url3))
+    response_json = response.json()
+    #od = list(response_json.values())
+    data_stores = [(i) for i in response_json.values()]
+    #print(data_stores)
 
+    '''
+    od = {
+        "id": response_json['id'],
+        "shipDate": response_json['shipDate']
+    }
+    print(od['id'])
+    '''
+    #data_stores = [(i['id'], i['petId'], i['quantity'], i['shipDate'], i['status'], i['complete']) for i in response.json()]
+    return render_template("stores.html", value=data_stores)
 
-
+'''
+@app.route('/pet', methods=['GET'])
+def pets(status: str = "pending"):
+    url2 = "https://petstore.swagger.io/v2/pet/findByStatus?status={0}".format(status)
+    response = requests.get(url2)
+    data_pets = [(i['id'], i['name'], i['status']) for i in response.json()]
+    return render_template('pets.html', value=data_pets)
+'''
 
 
 '''
