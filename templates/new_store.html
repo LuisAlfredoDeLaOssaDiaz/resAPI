@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <h1>Pet Form</h1>
+    <p>Enter Pet name:   </p>
+        <br>
+            <form action="/store_detail" method="post">
+                <input type="hidden" id="op" name="op" value="I">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup_id">Id</span>
+                    <input type="number" class="form-control" name="id" aria-label="Sizing example input" aria-describedby="inputGroup_idt">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup_name">PetId</span>
+                    <input type="number" class="form-control" name="petId" aria-label="Sizing example input" aria-describedby="inputGroup_name">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup_satus">Quantity</span>
+                    <input type="number" class="form-control" name="quantity" aria-label="Sizing example input" aria-describedby="inputGroup_name" value="available">
+                </div>
+                
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup_name">ShipDate</span>
+                    <input type="text" class="form-control" name="shipDate" aria-label="Sizing example input" aria-describedby="inputGroup_name">
+                </div>
+                
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup_name">Status</span>
+                    <input type="text" class="form-control" name="status" aria-label="Sizing example input" aria-describedby="inputGroup_name">
+                </div>
+                
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup_name">Complete</span>
+                    <input type="boolean" class="form-control" name="complete" aria-label="Sizing example input" aria-describedby="inputGroup_name">
+                </div>
+                
+                <br >
+                <input class="btn btn-primary" type="submit" name="form" value="Submit" />
+            </form>
+</div>
+{% endblock %}
