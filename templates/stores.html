@@ -20,6 +20,7 @@
               
               <br >
               <input class="btn btn-primary" type="submit" name="form" value="Submit" />
+              <a href="/stores/inventory" class="btn btn-warning btn-xs">Pet inventories by Status</a>
           </form>
 </div>
 
@@ -48,7 +49,6 @@
         <td>{{value[4]}}</td>
         <td>{{value[5]}}</td>
         <td>
-            <a href="/store_update/{{value[0]}}" class="btn btn-warning btn-xs">Edit</a>
             <a href="/store_delete/{{value[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
         </td>
     </tr>

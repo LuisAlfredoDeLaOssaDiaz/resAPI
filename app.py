@@ -1,3 +1,4 @@
+import string
 import requests
 from flask import Flask, redirect, render_template, request
 from flask_bootstrap import Bootstrap
@@ -22,6 +23,7 @@ def pet_detail():
     api_url = "https://petstore.swagger.io/v2/pet"
     id = request.form['id']
     name = request.form['name']
+    status = request.form['status']
     new_data = {
                     "id": id,
                     "category": {
@@ -37,13 +39,13 @@ def pet_detail():
                             "name": "string"
                         }
                     ],
-                    "status": "available"
+                    "status": status
                 }
     response = requests.post(api_url, json=new_data)
-    return render_template('pet_detail.html', value=(id, name))
+    return render_template('pet_detail.html', value=(id, name, status))
 
 
-@app.route('/pet', methods=['GET'])
+@app.route('/pet/', methods=['GET'])
 def pets(status: str = "pending"):
     url2 = "https://petstore.swagger.io/v2/pet/findByStatus?status={0}".format(status)
     response = requests.get(url2)
@@ -90,9 +92,6 @@ def pet_delete(id_pet):
     api_url = "https://petstore.swagger.io/v2/pet/{0}".format(id_pet)
     response = requests.delete(api_url)
     return render_template('pet_detail.html', value="Delete successfully")
-
-
-
 
 '''
 @app.route("/stores")
@@ -157,6 +156,22 @@ def stores(id):
     '''
     #data_stores = [(i['id'], i['petId'], i['quantity'], i['shipDate'], i['status'], i['complete']) for i in response.json()]
     return render_template("stores.html", value=data_stores)
+
+@app.route('/store_delete/<id>', methods=['GET'])
+def store_delete(id):
+    api_url_delete = "https://petstore.swagger.io/v2/store/order/{0}".format(id)
+    response = requests.delete(api_url_delete)
+    return render_template('store_detail.html', value = "id: " + id + " Deleted successfully")
+
+@app.route('/stores/inventory')
+def store_inventory():
+    api_uri_inventory = "https://petstore.swagger.io/v2/store/inventory"
+    response = (requests.get(api_uri_inventory))
+    data_json = response.json()
+    data = [ (i) for i in data_json.items()]
+    #print(data)
+    return render_template('inventory.html', value=data)
+
 
 '''
 @app.route('/pet', methods=['GET'])
