@@ -1,13 +1,9 @@
-import string
 import requests
 from flask import Flask, redirect, render_template, request
 from flask_bootstrap import Bootstrap
 
-
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
-model = []
-
 
 @app.route('/', methods=['GET'])
 def index():
@@ -16,7 +12,6 @@ def index():
 @app.route('/new_pet', methods=['GET'])
 def person():
     return render_template('new_pet.html')
-
 
 @app.route('/pet_detail', methods=['POST'])
 def pet_detail():
@@ -44,13 +39,11 @@ def pet_detail():
     response = requests.post(api_url, json=new_data)
     return render_template('pet_detail.html', value=(id, name, status))
 
-
 @app.route('/pet/', methods=['GET'])
 def pets(status: str = "pending"):
     url2 = "https://petstore.swagger.io/v2/pet/findByStatus?status={0}".format(status)
     response = requests.get(url2)
     data_pets = [(i['id'], i['name'], i['status']) for i in response.json()]
-    #print(data_pets)
     return render_template('pets.html', value=data_pets)
 
 
@@ -93,12 +86,6 @@ def pet_delete(id_pet):
     response = requests.delete(api_url)
     return render_template('pet_detail.html', value="Delete successfully")
 
-'''
-@app.route("/stores")
-def stores():
-    return render_template('stores.html')
-'''
-
 @app.route('/new_store', methods=['GET'])
 def new_store():
     return render_template('new_store.html')
@@ -134,7 +121,6 @@ def storess():
         print(id)
     else:
         id=0
-    
     rute = '/stores/{0}'.format(id)
     return redirect(rute)
 
@@ -143,18 +129,7 @@ def stores(id):
     url3 = "https://petstore.swagger.io/v2/store/order/{0}".format(id)
     response = (requests.get(url3))
     response_json = response.json()
-    #od = list(response_json.values())
     data_stores = [(i) for i in response_json.values()]
-    #print(data_stores)
-
-    '''
-    od = {
-        "id": response_json['id'],
-        "shipDate": response_json['shipDate']
-    }
-    print(od['id'])
-    '''
-    #data_stores = [(i['id'], i['petId'], i['quantity'], i['shipDate'], i['status'], i['complete']) for i in response.json()]
     return render_template("stores.html", value=data_stores)
 
 @app.route('/store_delete/<id>', methods=['GET'])
@@ -173,26 +148,39 @@ def store_inventory():
     return render_template('inventory.html', value=data)
 
 
-'''
-@app.route('/pet', methods=['GET'])
-def pets(status: str = "pending"):
-    url2 = "https://petstore.swagger.io/v2/pet/findByStatus?status={0}".format(status)
-    response = requests.get(url2)
-    data_pets = [(i['id'], i['name'], i['status']) for i in response.json()]
-    return render_template('pets.html', value=data_pets)
-'''
+@app.route('/signin')
+def signin():
+    return render_template('signin.html')
 
 
-'''
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
 
+@app.route('/signup_detail', methods=['POST'])
+def signup_detail():
+    api_url_signup = "https://petstore.swagger.io/v2/user"
+    id = request.form['id']
+    username = request.form['username']
+    firstName = request.form['firstName']
+    lastName = request.form['lastName']
+    email = request.form['email']
+    password = request.form['password']
+    phone = request.form['phone']
+    userStatus = request.form['userStatus']
+    new_data_store = {
+                        "id": id,
+                        "username": username,
+                        "firstName": firstName,
+                        "lastName": lastName,
+                        "email": email,
+                        "password": password,
+                        "phone": phone,
+                        "userStatus": userStatus
+                    }
+    response = requests.post(api_url_signup, json=new_data_store)
+    return render_template('store_detail.html', value=(id, username, firstName, lastName, email, password, phone, userStatus))
 
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('500.html'), 500
-'''
 if __name__ == '__main__':
     app.run()
 
